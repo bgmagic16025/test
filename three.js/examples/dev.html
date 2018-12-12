@@ -170,7 +170,22 @@
 	var mesh = new THREE.AxisHelper()
 	// markerRoot.add(mesh)
 	arWorldRoot.add(mesh)
+	
+	var loader = new THREE.ColladaLoader();
 
+loader.options.convertUpAxis = true;
+loader.load( './models/collada/monster/monster.dae', function ( collada ) {
+	dae = collada.scene;
+	dae.traverse( function ( child ) {
+       if ( child instanceof THREE.SkinnedMesh ) {
+var animation = new THREE.Animation( child, child.geometry.animation );
+		    animation.play();
+		 }
+             });
+             dae.scale.x = dae.scale.y = dae.scale.z = 0.001;
+	dea.rotation.set(0,Math.PI/2,Math.PI/2);
+	markerRoot.add(dae);
+/*
 	// add a torus knot
 	var geometry	= new THREE.CubeGeometry(1,1,1);
 	var material	= new THREE.MeshNormalMaterial({
@@ -189,9 +204,10 @@
 	mesh.position.y	= 0.5
 	// markerRoot.add( mesh );
 	arWorldRoot.add( mesh );
-	
+	*/
 	onRenderFcts.push(function(delta){
 		mesh.rotation.x += delta * Math.PI
+		dae.updateMatrix();
 	})
 
 	//////////////////////////////////////////////////////////////////////////////////
